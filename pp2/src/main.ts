@@ -46,6 +46,27 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
+// 4. OBJETO CUBO COM TEXTURA + FONTE DE LUZ
+const textureLoader = new THREE.TextureLoader();
+const cubeTexture = textureLoader.load('Glowstone_(texture)_JE2_BE2.png'); // coloque o arquivo na pasta raiz ou ajuste o caminho
+
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+
+const cubeMaterial = new THREE.MeshStandardMaterial({
+  map: cubeTexture,
+  emissive: 0xffaa00,         // cor da emissão (amarelo-alaranjado)
+  emissiveIntensity: 0.3      // intensidade da emissão
+});
+
+const texturedCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+texturedCube.position.set(0, 0.5, 0); // levemente acima do chão
+scene.add(texturedCube);
+
+// Luz pontual dentro do cubo
+const cubeLight = new THREE.PointLight(0xffaa00, 5, 15); // cor e intensidade
+cubeLight.position.set(0, 0, 0); // centralizada no cubo
+texturedCube.add(cubeLight); // a luz se move junto com o cubo
+
 // 5. LOOP DE ANIMAÇÃO
 const animate = () => {
     controls.update(); // Atualiza os controles de órbita

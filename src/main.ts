@@ -27,15 +27,15 @@ const grid = 10;
 //Tamanho do bloco
 const tamBloco = 1.5; 
 
-// Crie o primeiro bloco que servirá de modelo para os clones
+// Bloco de grama base
 const blocoBase = blocoGrama();
 
-// Loop duplo para criar a grade
+// Loop duplo para criar o chão
 for (let i = 0; i < grid; i++) {
     for (let j = 0; j < grid; j++) {
         const novoBloco = blocoBase.clone();
 
-        // Posição de cada bloco na grade (chão)
+        // Posição de cada bloco
         novoBloco.position.set(
             i * tamBloco - (grid * tamBloco) / 2, // X
             0,                                    // Y 

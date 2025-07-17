@@ -83,7 +83,8 @@ glowstoneCube.add(cubeLight); // a luz se move junto com o cubo
 // =================================================
 // ADICIONANDO LUZ AMBIENTE
 // =================================================
-const luzamb = new THREE.AmbientLight(0xffffff, 0);
+
+const luzamb = new THREE.AmbientLight(0xffffff, 0); //Para ver  melhor a cena, pode aumentar a intensidade
 cena.add(luzamb);
 const dirluz = new THREE.DirectionalLight(0xffffff, 0.05);
 dirluz.position.set(5, 5, 5);

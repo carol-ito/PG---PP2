@@ -27,7 +27,7 @@ const grid = 10;
 //Tamanho do bloco
 const tamBloco = 1.5; 
 
-// Crie o primeiro bloco que servirá de modelo para os clones
+//bloco base para o chão
 const blocoBase = blocoGrama();
 
 // Loop duplo para criar a grade

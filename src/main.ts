@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { createLadybugBody, createLadybugHead } from './objetos/objetodacarol.js';
+import { createLadybugAnimation } from './objetos/ladybugAnimation.js';
 import { blocoGrama } from './objetos/objeto_pedro.js';
 
 // 1. CENA E RENDERIZADOR
@@ -76,9 +78,26 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
+// criação da joaninha
+const body = createLadybugBody();
+const head = createLadybugHead();
+
+
+
+const ladybug = new THREE.Group();
+ladybug.add(body);
+ladybug.add(head);
+cena.add(ladybug);
+
+// cria a função de animação da joaninha
+const animateLadybug = createLadybugAnimation();
+
 // 5. LOOP DE ANIMAÇÃO
 const animate = () => {
     controls.update(); // Atualiza os controles de órbita
+
+    animateLadybug(ladybug); // atualiza a animação da joaninha
+
     render.render(cena, activeCamera); // Renderiza com a câmera ativa
     window.requestAnimationFrame(animate);
 };
@@ -92,3 +111,4 @@ window.addEventListener('resize', () => {
     render.setSize(window.innerWidth, window.innerHeight);
     render.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
+

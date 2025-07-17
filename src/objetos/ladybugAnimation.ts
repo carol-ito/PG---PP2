@@ -1,22 +1,22 @@
 import * as THREE from 'three'
 
 export function createLadybugAnimation() {
-    let flyAngle = 0;
-    const flyRadius = 5;
-    const flyHeightAmplitude = 1;
-    const flySpeed = 0.02;
+    let angulo = 0;
+    const raio = 5;
+    const amplitude = 1;
+    const vel = 0.02;
 
-    const minHeight = 1.5;      
+    const alturaMin = 1.5;      
 
     return function animateLadybug(ladybug: THREE.Group) {
-        flyAngle += flySpeed;
+        angulo += vel;
 
-        ladybug.position.x = flyRadius * Math.cos(flyAngle);
-        ladybug.position.z = flyRadius * Math.sin(flyAngle);
+        ladybug.position.x = raio * Math.cos(angulo);
+        ladybug.position.z = raio * Math.sin(angulo);
 
-        const verticalOscillation = (Math.sin(flyAngle * 3) + 1) / 2;
-        ladybug.position.y = minHeight + verticalOscillation * flyHeightAmplitude;
+        const oscilacao = (Math.sin(angulo * 3) + 1) / 2;
+        ladybug.position.y = alturaMin + oscilacao * amplitude;
         
-        ladybug.rotation.y = -flyAngle;
+        ladybug.rotation.y = -angulo;
     };
 }

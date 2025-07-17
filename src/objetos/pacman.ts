@@ -16,7 +16,6 @@ export function criarPacman(envMap: THREE.CubeTexture): THREE.Group {
     const geometriaSuperior = new THREE.SphereGeometry(raio, segmentos, segmentos, 0, Math.PI * 2, 0, Math.PI / 2);
     const metadeSuperior = new THREE.Mesh(geometriaSuperior, materialMetalico);
 
-    // 2. Criar uma geometria específica para a METADE INFERIOR
     // Desenha do meio (equador, ângulo PI/2) até a parte de baixo (polo sul, ângulo PI/2)
     const geometriaInferior = new THREE.SphereGeometry(raio, segmentos, segmentos, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
     const metadeInferior = new THREE.Mesh(geometriaInferior, materialMetalico);

@@ -4,6 +4,7 @@ import { createLadybugBody, createLadybugHead } from './objetos/objetodacarol.js
 import { createLadybugAnimation } from './objetos/ladybugAnimation.js';
 import { blocoGrama } from './objetos/objeto_pedro.js';
 import { glowstone } from './objetos/glowstone.js';
+import { criarPacman } from './objetos/pacman.ts'; // objetorenan
 
 // ==================================================
 // CRIANDO A CENA E O RENDERIZADOR
@@ -47,6 +48,22 @@ for (let i = 0; i < grid; i++) {
 }
 
 cena.add(chao);
+
+// =================================================
+// CRIAÇÃO DO PAC-MAN E MAPA DE AMBIENTE (METAL)
+// =================================================
+
+// textura onde o reflexo será salvo
+const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256); // 256 é a resolução da textura
+const cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget); // camera auxiliar para capturar a textura de ambiente
+const meuPacman = criarPacman(cubeRenderTarget.texture);
+
+// Com a separação dos grupos, fica mais fácil animar a direção que o pacman 'olha' 
+const pacmanGroup = new THREE.Group();
+pacmanGroup.add(meuPacman);
+pacmanGroup.position.set(5, 0.7, 5); 
+cena.add(pacmanGroup);
+
 
 // =================================================
 // CRIAÇÃO DO OBJETO LUMINOSO GLOWSTONE
@@ -111,13 +128,66 @@ cena.add(ladybug);
 // cria a função de animação da joaninha
 const animateLadybug = createLadybugAnimation();
 
+// Constantes para o movimento do Pac-Manconst PACMAN_SPEED = 2.0; // Unidades por segundo
+const PACMAN_SPEED = 10.0;
+const MIN_FOLLOW_DISTANCE = 1.5; // Distância mínima que o Pac-Man tentará manter da joaninha
+
+const clock = new THREE.Clock();
+
 // =================================================
 // LOOP DE ANIMAÇÃO
 // =================================================
 const animate = () => {
-    controls.update(); // Atualiza os controles de órbita
 
-    animateLadybug(ladybug); // atualiza a animação da joaninha
+    // o movimento deve ser o mesmo em qualquer computador/taxa de frames
+    const deltaTime = clock.getDelta();
+    const elapsedTime = clock.getElapsedTime(); // Tempo total para a boca
+
+    controls.update();
+
+    animateLadybug(ladybug);
+
+    // --- ATUALIZAÇÃO DO REFLEXO EM TEMPO REAL ---
+    if (meuPacman) {
+        meuPacman.visible = false; // não refletir nele mesmo
+        
+        cubeCamera.position.copy(pacmanGroup.position);
+        cubeCamera.update(render, cena);
+
+        meuPacman.visible = true;
+    }
+
+    // --- MOVIMENTAÇÃO DO PACMAN ---
+    const pacmanPosition = pacmanGroup.position;
+    const ladybugPosition = ladybug.position;
+    const distance = pacmanPosition.distanceTo(ladybugPosition);
+
+    // só se move se estiver mais longe que a distância mínima
+    if (distance > MIN_FOLLOW_DISTANCE) {
+        // Calcula o vetor de direção (de Pac-Man para a joaninha)
+        const direction = new THREE.Vector3().subVectors(ladybugPosition, pacmanPosition).normalize();
+
+        // Move o Pac-Man nessa direção, baseado na velocidade e no tempo
+        pacmanGroup.position.add(direction.multiplyScalar(PACMAN_SPEED * deltaTime));
+    }
+
+    // Faz o Pac-Man sempre "olhar" para a joaninha
+    pacmanGroup.lookAt(ladybugPosition);
+
+    // --- ANIMAÇÃO DA BOCA --- 
+    const aberturaMinima = 0;
+    const aberturaMaxima = Math.PI * 0.25; // aumentado um pouco para ser mais visível
+    const velocidadeBoca = 10;
+    
+    const oscilacao = Math.sin(elapsedTime * velocidadeBoca);
+    const alpha = (oscilacao + 1) / 2;
+    const anguloAbertura = aberturaMinima + alpha * (aberturaMaxima - aberturaMinima);
+    
+     if (meuPacman.userData.boca) {
+         // efeito deve ser como uma "dobradiça"
+         meuPacman.userData.boca.superior.rotation.x = -anguloAbertura;
+         meuPacman.userData.boca.inferior.rotation.x = anguloAbertura;
+     }
 
     render.render(cena, activeCamera); // Renderiza com a câmera ativa
     window.requestAnimationFrame(animate);

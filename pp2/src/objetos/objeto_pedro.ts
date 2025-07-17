@@ -1,40 +1,32 @@
 import * as THREE from 'three';
 
 export function blocoGrama() {
-    // 1. Crie uma instância do TextureLoader para carregar as imagens
-    const textureLoader = new THREE.TextureLoader();
+    //Instância para carregar as texturas
+    const textura = new THREE.TextureLoader();
 
-    // 2. Carregue cada uma das suas texturas da pasta /public/
-    // Use os nomes exatos dos arquivos que você salvou.
-    const topTexture = textureLoader.load('/grass_top.png');
-    const sideTexture = textureLoader.load('/grass_side.png');
-    const bottomTexture = textureLoader.load('/grass_bottom.png');
+    const topTextura = textura.load('/grass_top.png');
+    const sideTextura = textura.load('/grass_side.png');
+    const bottomTextura = textura.load('/grass_bottom.png');
 
-    // 3. Configure o filtro para manter o visual "pixelado"
-    // Esta é a parte essencial para o estilo Minecraft.
-    // Sem isso, as texturas ficariam borradas.
-    topTexture.magFilter = THREE.NearestFilter;
-    sideTexture.magFilter = THREE.NearestFilter;
-    bottomTexture.magFilter = THREE.NearestFilter;
+    // Adicionando um filtro na textura
+    topTextura.magFilter = THREE.NearestFilter;
+    sideTextura.magFilter = THREE.NearestFilter;
+    bottomTextura.magFilter = THREE.NearestFilter;
 
-    // 4. Crie um array de materiais, um para cada face do cubo
-    // A ordem é importante: [direita, esquerda, topo, fundo, frente, trás]
     const materials = [
-        new THREE.MeshStandardMaterial({ map: sideTexture }),    // Face direita
-        new THREE.MeshStandardMaterial({ map: sideTexture }),    // Face esquerda
-        new THREE.MeshStandardMaterial({ map: topTexture }),     // Face de cima (topo)
-        new THREE.MeshStandardMaterial({ map: bottomTexture }),  // Face de baixo (fundo)
-        new THREE.MeshStandardMaterial({ map: sideTexture }),    // Face da frente
-        new THREE.MeshStandardMaterial({ map: sideTexture }),    // Face de trás
+        new THREE.MeshStandardMaterial({ map: sideTextura }),    // direita
+        new THREE.MeshStandardMaterial({ map: sideTextura }),    // esquerda
+        new THREE.MeshStandardMaterial({ map: topTextura }),     // topo
+        new THREE.MeshStandardMaterial({ map: bottomTextura }),  // embaixo
+        new THREE.MeshStandardMaterial({ map: sideTextura }),    // frente
+        new THREE.MeshStandardMaterial({ map: sideTextura }),    // trás
     ];
 
-    // 5. Crie a geometria do cubo (um esqueleto de cubo)
-    // Você pode alterar os valores para mudar o tamanho do cubo.
+    // Tamanho do bloco
     const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
 
-    // 6. Crie o Mesh, que combina a geometria com os materiais (a "pele")
+    // Combinando o bloco de grama com as texturas
     const cube = new THREE.Mesh(geometry, materials);
 
-    // 7. Retorne o objeto cubo pronto para ser usado na cena
     return cube;
 }

@@ -13,7 +13,7 @@ export function blocoGrama() {
     sideTextura.magFilter = THREE.NearestFilter;
     bottomTextura.magFilter = THREE.NearestFilter;
 
-    const materials = [
+    const materiais = [
         new THREE.MeshStandardMaterial({ map: sideTextura }),    // direita
         new THREE.MeshStandardMaterial({ map: sideTextura }),    // esquerda
         new THREE.MeshStandardMaterial({ map: topTextura }),     // topo
@@ -23,10 +23,10 @@ export function blocoGrama() {
     ];
 
     // Tamanho do bloco
-    const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+    const forma = new THREE.BoxGeometry(1.5, 1.5, 1.5);
 
     // Combinando o bloco de grama com as texturas
-    const cube = new THREE.Mesh(geometry, materials);
+    const cube = new THREE.Mesh(forma, materiais);
 
     return cube;
 }

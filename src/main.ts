@@ -5,7 +5,9 @@ import { createLadybugAnimation } from './objetos/ladybugAnimation.js';
 import { blocoGrama } from './objetos/objeto_pedro.js';
 import { glowstone } from './objetos/glowstone.js';
 
-// 1. CENA E RENDERIZADOR
+// ==================================================
+// CRIANDO A CENA E O RENDERIZADOR
+// ==================================================
 const cena = new THREE.Scene();
 const render = new THREE.WebGLRenderer({
     canvas: document.querySelector('canvas.webgl')!
@@ -13,7 +15,9 @@ const render = new THREE.WebGLRenderer({
 render.setSize(window.innerWidth, window.innerHeight);
 render.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-// 1. CRIANDO O CHÃO COM O BLOCO DE GRAMA   
+// ==================================================
+// CRIANDO O CHÃO COM O BLOCO DE GRAMA   
+// ==================================================
 const chao = new THREE.Group();
 
 // Tamanho da grada
@@ -22,35 +26,36 @@ const grid = 10;
 //Tamanho do bloco
 const tamBloco = 1.5; 
 
-
 // Crie o primeiro bloco que servirá de modelo para os clones
 const blocoBase = blocoGrama();
 
 // Loop duplo para criar a grade
 for (let i = 0; i < grid; i++) {
     for (let j = 0; j < grid; j++) {
-        // 1. Clone o bloco base
         const novoBloco = blocoBase.clone();
 
-        // 2. Calcule a posição de cada bloco na grade
-        // Subtraímos (gridSize * blockSize) / 2 para centralizar a grade na origem (0,0)
+        // Posição de cada bloco na grade (chão)
         novoBloco.position.set(
-            i * tamBloco - (grid * tamBloco) / 2, // Posição X
-            0,                                          // Posição Y (altura do chão)
-            j * tamBloco - (grid * tamBloco) / 2  // Posição Z
+            i * tamBloco - (grid * tamBloco) / 2, // X
+            0,                                    // Y 
+            j * tamBloco - (grid * tamBloco) / 2  // Z
         );
-
-        // 3. Adicione o novo bloco clonado ao grupo do chão
+        
+        //Adiciona o novo bloco ao grupo do chão
         chao.add(novoBloco);
     }
 }
 
-// 4. Adicione o grupo inteiro (com todos os blocos) à cena de uma só vez
 cena.add(chao);
 
+// =================================================
+// CRIAÇÃO DO OBJETO LUMINOSO GLOWSTONE
+// =================================================
 const glowstoneCube = glowstone();
 
-glowstoneCube.position.set(0, 1.5, 0); // levemente acima do chão
+// Posiciona o glowstone no centro da cena 
+// (x, y, z) = (0, 1.5, 0)
+glowstoneCube.position.set(-0.75, 1.5, -0.75); 
 cena.add(glowstoneCube);
 
 // Luz pontual dentro do cubo
@@ -58,16 +63,18 @@ const cubeLight = new THREE.PointLight(0xffaa00, 5, 1000); // cor e intensidade
 cubeLight.position.set(0, 0, 0); // centralizada no cubo
 glowstoneCube.add(cubeLight); // a luz se move junto com o cubo
 
-
-// Luz ambiente para ajudar na visualização
+// =================================================
+// ADICIONANDO LUZ AMBIENTE
+// =================================================
 const luzamb = new THREE.AmbientLight(0xffffff, 0);
 cena.add(luzamb);
 const dirluz = new THREE.DirectionalLight(0xffffff, 0.05);
 dirluz.position.set(5, 5, 5);
 cena.add(dirluz);
 
-// Adição de duas cameras, uma perspectiva e outra ortográfica
-// Aperte C para alternar entre elas
+// =================================================
+// CRIAÇÃO DAS CÂMERAS
+// =================================================
 const cam1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 cam1.position.set(4, 5, 8);
 cena.add(cam1);
@@ -90,7 +97,9 @@ window.addEventListener('keydown', (event) => {
     }
 });
 
-// criação da joaninha
+// =================================================
+// CRIAÇÃO DA JOANINHA
+// =================================================
 const body = createLadybugBody();
 const head = createLadybugHead();
 
@@ -102,7 +111,9 @@ cena.add(ladybug);
 // cria a função de animação da joaninha
 const animateLadybug = createLadybugAnimation();
 
+// =================================================
 // LOOP DE ANIMAÇÃO
+// =================================================
 const animate = () => {
     controls.update(); // Atualiza os controles de órbita
 
@@ -114,7 +125,9 @@ const animate = () => {
 
 animate();
 
-// Redimensionamento da janela
+// =================================================
+// REDIMENSIONAMENTO DA TELA
+// =================================================
 window.addEventListener('resize', () => {
     cam1.aspect = window.innerWidth / window.innerHeight;
     cam1.updateProjectionMatrix();

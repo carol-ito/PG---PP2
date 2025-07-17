@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createLadybugBody, createLadybugHead } from './objetos/objetodacarol.js';
 import { createLadybugAnimation } from './objetos/ladybugAnimation.js';
 import { blocoGrama } from './objetos/objeto_pedro.js';
+import { glowstone } from './objetos/glowstone.js';
 
 // 1. CENA E RENDERIZADOR
 const cena = new THREE.Scene();
@@ -47,15 +48,26 @@ for (let i = 0; i < grid; i++) {
 // 4. Adicione o grupo inteiro (com todos os blocos) à cena de uma só vez
 cena.add(chao);
 
+const glowstoneCube = glowstone();
 
-// 3. LUZES
-const luzamb = new THREE.AmbientLight(0xffffff, 0.7);
+glowstoneCube.position.set(0, 1.5, 0); // levemente acima do chão
+cena.add(glowstoneCube);
+
+// Luz pontual dentro do cubo
+const cubeLight = new THREE.PointLight(0xffaa00, 5, 1000); // cor e intensidade
+cubeLight.position.set(0, 0, 0); // centralizada no cubo
+glowstoneCube.add(cubeLight); // a luz se move junto com o cubo
+
+
+// Luz ambiente para ajudar na visualização
+const luzamb = new THREE.AmbientLight(0xffffff, 0);
 cena.add(luzamb);
-const dirluz = new THREE.DirectionalLight(0xffffff, 1.5);
+const dirluz = new THREE.DirectionalLight(0xffffff, 0.05);
 dirluz.position.set(5, 5, 5);
 cena.add(dirluz);
 
-// 4. CÂMERAS (Requisito: pelo menos duas)
+// Adição de duas cameras, uma perspectiva e outra ortográfica
+// Aperte C para alternar entre elas
 const cam1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 cam1.position.set(4, 5, 8);
 cena.add(cam1);
@@ -82,8 +94,6 @@ window.addEventListener('keydown', (event) => {
 const body = createLadybugBody();
 const head = createLadybugHead();
 
-
-
 const ladybug = new THREE.Group();
 ladybug.add(body);
 ladybug.add(head);
@@ -92,7 +102,7 @@ cena.add(ladybug);
 // cria a função de animação da joaninha
 const animateLadybug = createLadybugAnimation();
 
-// 5. LOOP DE ANIMAÇÃO
+// LOOP DE ANIMAÇÃO
 const animate = () => {
     controls.update(); // Atualiza os controles de órbita
 

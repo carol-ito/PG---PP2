@@ -96,7 +96,18 @@ const cam1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHei
 cam1.position.set(4, 5, 8);
 cena.add(cam1);
 
-const cam2 = new THREE.OrthographicCamera(-20, 20, 20, -20, 2, 200);
+const aspectRatio = window.innerWidth / window.innerHeight;
+// Zoom da câmera ortográfica
+const frustumSize = 25; 
+
+const cam2 = new THREE.OrthographicCamera(
+    frustumSize * aspectRatio / -2, // esq
+    frustumSize * aspectRatio / 2,  // dir
+    frustumSize / 2,                // topo
+    frustumSize / -2,               // baixo
+    0.1,                            // prox
+    100                             // dist
+);
 cam2.position.set(0, 20, 0);
 cam2.lookAt(0, 0, 0);
 

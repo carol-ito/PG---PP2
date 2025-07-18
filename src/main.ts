@@ -27,7 +27,7 @@ const grid = 10;
 //Tamanho do bloco
 const tamBloco = 1.5; 
 
-// Crie o primeiro bloco que servirá de modelo para os clones
+//bloco base para o chão
 const blocoBase = blocoGrama();
 
 // Loop duplo para criar a grade
@@ -54,8 +54,8 @@ cena.add(chao);
 // =================================================
 
 // textura onde o reflexo será salvo
-const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256); // 256 é a resolução da textura
-const cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget); // camera auxiliar para capturar a textura de ambiente
+const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024); // 1024 é a resolução da textura
+const cubeCamera = new THREE.CubeCamera(1, 10, cubeRenderTarget); // camera auxiliar para capturar a textura de ambiente
 const meuPacman = criarPacman(cubeRenderTarget.texture);
 
 // Com a separação dos grupos, fica mais fácil animar a direção que o pacman 'olha' 
@@ -140,7 +140,7 @@ cena.add(ladybug);
 const animateLadybug = createLadybugAnimation();
 
 // Constantes para o movimento do Pac-Manconst PACMAN_SPEED = 2.0; // Unidades por segundo
-const PACMAN_SPEED = 10.0;
+const PACMAN_SPEED = 3;
 const MIN_FOLLOW_DISTANCE = 1.5; // Distância mínima que o Pac-Man tentará manter da joaninha
 
 const clock = new THREE.Clock();
